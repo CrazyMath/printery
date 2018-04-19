@@ -7,21 +7,30 @@ Local deployment
 Software dependency:
 
     Vagrant 2.0.3
+
     Virtualbox 5.2.10
+
     nfsd - https://www.vagrantup.com/docs/synced-folders/nfs.html
+
     git
 
 After all software requirement installed:
 
     git clone https://github.com/CrazyMath/printery.git
+
     cd printery
+
     vagrant up
+
     vagrant ssh
+
     source ~/.env/bin/activate
+
     cd /vagrant/
+
     python manage.py runserver 0.0.0.0:8000
 
-After that server will be available by url http://127.0.0.1:8000 in your browser
+After that server will be available by url `http://127.0.0.1:8000` in your browser
 
 
 Test data
@@ -36,16 +45,19 @@ It will create 3 users:
 Superuser:
 
     login: admin
+
     password: test1234
 
 Writer:
 
     login: writer
+
     password: test1234
 
 Editor:
 
     login: editor
+
     password: test1234
 
 And also it will create 30 new Articles.
@@ -82,11 +94,11 @@ available on page `http://127.0.0.1:8000/articles/user/` there editor can review
 Production usage
 ^^^^^^^^^^^^^^^^
 
-For production usage should be used production requirements which can be found in file `requirements/production.txt`
+For production usage should be used production requirements which can be found in file `requirements/production.txt`.
 
-Server for production should be run with key `--settings=config.settings.production`
+Server for production should be run with key `--settings=config.settings.production`.
 
-Production settings can be found in file `config/settings/production.py`
+Production settings can be found in file `config/settings/production.py`.
 
 In file `env.example` can be founded variables wich should be specified for production environment.
 
