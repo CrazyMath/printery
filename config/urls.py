@@ -14,6 +14,7 @@ urlpatterns = [
 
     # User management
     url(r'^users/', include('printery.users.urls', namespace='users')),
+    url(r'^', include('printery.articles.urls', namespace='articles')),
     url(r'^accounts/', include('allauth.urls')),
 
     # Your stuff: custom urls includes go here

@@ -45,3 +45,4 @@ redis>=2.10.5
 
 # Your custom requirements go here
 django-braces==1.8.1
+djangorestframework==3.5.1

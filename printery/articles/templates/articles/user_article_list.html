@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="row">
+        <div class="col-lg-12">
+          <table class="table">
+            <thead>
+            <tr>
+              <th scope="col">{% trans 'Title' %}</th>
+              <th scope="col">{% trans 'Article Url' %}</th>
+              <th scope="col">{% trans 'Status' %}</th>
+              <th scope="col">{% trans 'Action' %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+              <tr>
+                <td>{{ object.title }}</td>
+                <td>
+                  {% if object.article_url %}
+                    <a href="{{ object.article_url }}">{{ object.article_url }}</a>
+
+                  {% endif %}
+                </td>
+                <td>{{ object.get_status_display }}</td>
+                <td>
+                  {% if object.status != 'approved' %}
+                    <i class="fa fa-edit edit_article"
+                       data-url="{% url 'articles:api_article-detail' pk=object.pk %}"
+                       data-title="{{ object.title }}"
+                       data-modal-title="{% trans 'Update Article' %}"
+                       data-message=""
+                       data-button-title="{% trans 'Update' %}"
+                       data-input-name="article_url"
+                       data-input-value="{{ object.article_url|default_if_none:"" }}"
+                       data-input-type="url"
+                       title="{% trans 'Edit Article' %}"
+                    ></i>
+                    <i class="fa fa-share-square edit_article"
+                       data-url="{% url 'articles:api_article-detail' pk=object.pk %}"
+                       data-title="{{ object.title }}"
+                       data-modal-title="{% trans 'Confirmation' %}"
+                       data-message="{% blocktrans %} Are you sure that you want to submit article '{{ object }}' to review. {% endblocktrans %}"
+                       data-button-title="{% trans 'Submit' %}"
+                       data-input-name="status"
+                       data-input-value="review"
+                       data-input-type="hidden"
+                       title="{% trans 'Submit to review' %}"
+                    ></i>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 text-center">
+            <nav class="navigation">
+              <ul class="pagination">
+                {% if page_obj.has_previous %}
+                  <li class="page-item">
+                    <a class="page-link"
+                       href="{% url 'articles:article_list' %}?page={{ page_obj.previous_page_number }}&{{ query_param }}"
+                       aria-label="Previous">
+                      <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>
+                {% endif %}
+
+                {% for page_number in paginator.page_range %}
+
+                  {% if page_obj.number|add:"-5" == page_number and not forloop.first %}
+                    <li class="page-item disabled">
+                                        <span>
+                                            ...
+                                        </span>
+                    </li>
+                  {% endif %}
+                  {% if page_obj.number|add:"-5" < page_number and page_number < page_obj.number|add:"5" or forloop.first or forloop.last %}
+                    {% if page_number == page_obj.number %}
+                      <li class="page-item active">
+                                            <span class="page-link">
+                                                {{ page_number }}
+                                            </span>
+                      </li>
+                    {% else %}
+                      <li class="page-item">
+                        <a class="page-link"
+                           href="{% url 'articles:article_list' %}?page={{ page_number }}&{{ query_param }}">
+                          {{ page_number }}
+                        </a>
+                      </li>
+                    {% endif %}
+                  {% endif %}
+
+                  {% if page_obj.number|add:"5" == page_number and not forloop.last %}
+                    <li class="page-item disabled">
+                                        <span>
+                                            ...
+                                        </span>
+                    </li>
+                  {% endif %}
+
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                  <li class="page-item">
+                    <a class="page-link"
+                       href="{% url 'articles:article_list' %}?page={{ page_obj.next_page_number }}&{{ query_param }}"
+                       aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                  </li>
+                {% endif %}
+
+
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">{% trans 'Confirm Assignment' %}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="" id="modal-form" method="PATCH" class="form">
+
+            <div class="form-group">
+              <input type="url" class="form-control input" placeholder="{% trans 'Enter Article Url' %}" required>
+            </div>
+          </form>
+          <p class="message"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans 'Close' %}</button>
+          <button type="submit" form="modal-form" class="btn btn-primary submit">{% trans 'Assign' %}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

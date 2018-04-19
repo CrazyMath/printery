@@ -7,7 +7,6 @@ from django.utils.translation import ugettext_lazy as _
 
 @python_2_unicode_compatible
 class User(AbstractUser):
-
     WRITER = 'writer'
     EDITOR = 'editor'
     ROLES = (
@@ -29,3 +28,9 @@ class User(AbstractUser):
 
     def get_absolute_url(self):
         return reverse('users:detail', kwargs={'username': self.username})
+
+    def is_writer(self):
+        return self.role == self.WRITER
+
+    def is_editor(self):
+        return self.role == self.EDITOR

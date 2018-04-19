@@ -26,6 +26,20 @@ class UUIDModel(models.Model):
         abstract = True
 
 
+class QueryMixin(object):
+    """
+    Mixin add to context query params
+    """
+    def get_context_data(self, **kwargs):
+        context = super(QueryMixin, self).get_context_data(**kwargs)
+        query_param = self.request.GET.copy()
+        if 'page' in query_param.keys():
+            query_param.pop('page')
+
+        context['query_param'] = query_param.urlencode()
+        return context
+
+
 class ActiveTabMixin(object):
     """
     Mixin to set active tab menu
