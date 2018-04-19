@@ -1,0 +1,6 @@
+---
+
+- name: Restart Elasticsearch
+  become: yes
+  become_user: root
+  service: name=elasticsearch state=restarted

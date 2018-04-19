@@ -1,0 +1,21 @@
+---
+
+- name: Install Elasticsearch dependency
+  apt: name={{ item }} update_cache={{ update_apt_cache }} state=installed
+  with_items:
+    - openjdk-7-jre-headless
+  tags: packages
+
+- name: Install Elasticsearch
+  apt: deb=https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.4.deb
+  tags: packages
+
+- name: Ensure Elasticsearch server is running
+  become: yes
+  become_user: root
+  action: service name=elasticsearch state=started
+
+- name: Make Elasticsearch as deamon
+  become: yes
+  become_user: root
+  command: update-rc.d elasticsearch defaults 95 10
