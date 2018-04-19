@@ -17,6 +17,7 @@
               <tr>
                 <td>{{ object.title }}</td>
                 <td>
+                {% if user.is_writer %}
                   <i class="fa fa-hand-paper assign_writer"
                      data-url="{% url 'articles:api_article-detail' pk=object.pk %}"
                      data-title="{{ object.title }}"
@@ -29,7 +30,25 @@
                      data-input-type="hidden"
                      title="{% trans 'Assign to yourself' %}"
                   ></i>
+                {% elif user.is_editor %}
+                  <i class="fa fa-hand-paper assign_writer"
+                     data-url="{% url 'articles:api_article-detail' pk=object.pk %}"
+                     data-title="{{ object.title }}"
+                     data-modal-title="{% trans 'Confirmation' %}"
+                     data-message="{% blocktrans %} Are you sure that you want to assign '{{ object }}' to yourself? {% endblocktrans %}"
+                     data-writer="{{ user.pk }}"
+                     data-button-title="{% trans 'Submit' %}"
+                     data-input-name="editor"
+                     data-input-value="{{ user.pk }}"
+                     data-input-type="hidden"
+                     title="{% trans 'Assign to yourself' %}"
+                  ></i>
+                {% endif %}
                 </td>
+              </tr>
+               {% empty %}
+              <tr>
+              <td colspan="2">{% trans "There aren't articles yet." %}</td>
               </tr>
             {% endfor %}
             </tbody>

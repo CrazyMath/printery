@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
+from braces.views import LoginRequiredMixin
 from django.views.generic import ListView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
@@ -11,31 +12,31 @@ from .models import Article
 from .serializers import ArticleSerializer
 
 
-class ArticleListView(QueryMixin, ListView):
+class ArticleListView(LoginRequiredMixin, QueryMixin, ListView):
     model = Article
     paginate_by = 10
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        if self.request.user.is_writer():
+        if self.request.user.is_writer:
             return queryset.filter(status=Article.NEW, writer__isnull=True)
-        elif self.request.user.is_editor():
+        elif self.request.user.is_editor:
             return queryset.filter(status=Article.REVIEW, editor__isnull=True)
         else:
             return queryset.none()
 
 
-class UserArticleListView(ListView):
+class UserArticleListView(LoginRequiredMixin, QueryMixin, ListView):
     model = Article
     template_name = 'articles/user_article_list.html'
 
     def get_queryset(self):
         queryset = super().get_queryset()
 
-        if self.request.user.is_writer():
-            return queryset.filter(writer=self.request.user).order_by('status')
-        elif self.request.user.is_editor():
-            return queryset.filter(editor=self.request.user)
+        if self.request.user.is_writer:
+            return queryset.filter(writer=self.request.user).order_by('-status')
+        elif self.request.user.is_editor:
+            return queryset.filter(editor=self.request.user).order_by('-status')
         else:
             return queryset.none()
 

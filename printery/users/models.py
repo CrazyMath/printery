@@ -29,8 +29,10 @@ class User(AbstractUser):
     def get_absolute_url(self):
         return reverse('users:detail', kwargs={'username': self.username})
 
+    @property
     def is_writer(self):
         return self.role == self.WRITER
 
+    @property
     def is_editor(self):
         return self.role == self.EDITOR

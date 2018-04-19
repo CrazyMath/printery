@@ -26,31 +26,53 @@
                 </td>
                 <td>{{ object.get_status_display }}</td>
                 <td>
-                  {% if object.status != 'approved' %}
-                    <i class="fa fa-edit edit_article"
-                       data-url="{% url 'articles:api_article-detail' pk=object.pk %}"
-                       data-title="{{ object.title }}"
-                       data-modal-title="{% trans 'Update Article' %}"
-                       data-message=""
-                       data-button-title="{% trans 'Update' %}"
-                       data-input-name="article_url"
-                       data-input-value="{{ object.article_url|default_if_none:"" }}"
-                       data-input-type="url"
-                       title="{% trans 'Edit Article' %}"
-                    ></i>
-                    <i class="fa fa-share-square edit_article"
-                       data-url="{% url 'articles:api_article-detail' pk=object.pk %}"
-                       data-title="{{ object.title }}"
-                       data-modal-title="{% trans 'Confirmation' %}"
-                       data-message="{% blocktrans %} Are you sure that you want to submit article '{{ object }}' to review. {% endblocktrans %}"
-                       data-button-title="{% trans 'Submit' %}"
-                       data-input-name="status"
-                       data-input-value="review"
-                       data-input-type="hidden"
-                       title="{% trans 'Submit to review' %}"
-                    ></i>
+                  {% if user.is_writer %}
+                    {% if object.status != 'approved' %}
+                      <i class="fa fa-edit edit_article"
+                         data-url="{% url 'articles:api_article-detail' pk=object.pk %}"
+                         data-title="{{ object.title }}"
+                         data-modal-title="{% trans 'Update Article' %}"
+                         data-message=""
+                         data-button-title="{% trans 'Update' %}"
+                         data-input-name="article_url"
+                         data-input-value="{{ object.article_url|default_if_none:"" }}"
+                         data-input-type="url"
+                         title="{% trans 'Edit Article' %}"
+                      ></i>
+                      {% if object.article_url %}
+                        <i class="fa fa-share-square edit_article"
+                           data-url="{% url 'articles:api_article-detail' pk=object.pk %}"
+                           data-title="{{ object.title }}"
+                           data-modal-title="{% trans 'Confirmation' %}"
+                           data-message="{% blocktrans %} Are you sure that you want to submit article '{{ object }}' to review? {% endblocktrans %}"
+                           data-button-title="{% trans 'Submit' %}"
+                           data-input-name="status"
+                           data-input-value="review"
+                           data-input-type="hidden"
+                           title="{% trans 'Submit to review' %}"
+                        ></i>
+                      {% endif %}
+                    {% endif %}
+                  {% elif user.is_editor %}
+                    {% if object.status != 'approved' %}
+                      <i class="fa fa-thumbs-up edit_article"
+                         data-url="{% url 'articles:api_article-detail' pk=object.pk %}"
+                         data-title="{{ object.title }}"
+                         data-modal-title="{% trans 'Confirmation' %}"
+                         data-message="{% blocktrans %} Are you sure that you want to approve article '{{ object }}'? {% endblocktrans %}"
+                         data-button-title="{% trans 'Submit' %}"
+                         data-input-name="status"
+                         data-input-value="approved"
+                         data-input-type="hidden"
+                         title="{% trans 'Approve' %}"
+                      ></i>
+                    {% endif %}
                   {% endif %}
                 </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="4">{% trans "There aren't articles yet." %}</td>
               </tr>
             {% endfor %}
             </tbody>
