@@ -49,12 +49,15 @@ THIRD_PARTY_APPS = [
     'allauth',  # registration
     'allauth.account',  # registration
     'allauth.socialaccount',  # registration
+    'braces',
 ]
 
 # Apps specific for this project go here.
 LOCAL_APPS = [
     # custom users app
+    'printery.common.apps.CommonConfig',
     'printery.users.apps.UsersConfig',
+    'printery.articles.apps.ArticlesConfig',
     # Your stuff: custom apps go here
 ]
 
@@ -252,7 +255,6 @@ AUTHENTICATION_BACKENDS = [
 # Some really nice defaults
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 ACCOUNT_ALLOW_REGISTRATION = env.bool('DJANGO_ACCOUNT_ALLOW_REGISTRATION', True)
 ACCOUNT_ADAPTER = 'printery.users.adapters.AccountAdapter'
@@ -273,3 +275,9 @@ ADMIN_URL = r'^admin/'
 
 # Your common stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------
+
+ACCOUNT_FORMS = {
+    'signup': 'printery.users.forms.CustomSignupForm'
+}
+
+ACCOUNT_EMAIL_VERIFICATION = "none"
