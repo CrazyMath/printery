@@ -6,9 +6,6 @@ import uuid
 from braces.views import AjaxResponseMixin, JSONResponseMixin
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
-from django.core.cache import cache
-from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy
 
 
 class DateTimeStampedModel(models.Model):

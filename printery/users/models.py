@@ -21,7 +21,9 @@ class User(AbstractUser):
     role = models.CharField(max_length=255,
                             choices=ROLES,
                             default=WRITER,
-                            verbose_name=_('Role'))
+                            verbose_name=_('Role'),
+                            null=True,
+                            blank=True)
 
     def __str__(self):
         return self.username

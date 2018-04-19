@@ -6,7 +6,10 @@ from .models import Article
 
 
 class ArticleAdmin(admin.ModelAdmin):
-    pass
+    fields = ('title',)
+    list_display = ('title', 'article_url', 'status', 'writer', 'editor', 'create_at')
+    date_hierarchy = 'create_at'
+    search_fields = ('title', 'writer__username', 'editor__username')
 
 
 admin.site.register(Article, ArticleAdmin)

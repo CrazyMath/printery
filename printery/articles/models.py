@@ -41,6 +41,9 @@ class Article(UUIDModel, DateTimeStampedModel):
                                verbose_name=_('Writer'),
                                null=True)
 
+    class Meta:
+        ordering = ('create_at',)
+
     def __str__(self):
         return self.title
 
